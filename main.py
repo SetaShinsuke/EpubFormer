@@ -14,7 +14,11 @@ if (not os.path.exists(tmp_dir)):
 if (not os.path.exists(output_dir)):
     os.makedirs(output_dir)
 
-for index, file in enumerate(os.listdir(input_dir)):
-    print(f'File.{index:02d}: {file}')
+i = 0
+for file in os.listdir(input_dir):
+    if (not file.endswith('.epub')):
+        continue
+    print(f'File.{i:02d}: {file}')
+    i += 1
     former = epub_former.EpubFormer(file, input_dir, tmp_dir, output_dir)
     former.start_forming()
