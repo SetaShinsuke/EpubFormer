@@ -1,9 +1,4 @@
 /.idea
-/input
-!/input/.keep
-/output
-!/output/.keep
 /__pycache__
 /tmp
 /Common/__pycache__
-
