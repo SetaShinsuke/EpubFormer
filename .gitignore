@@ -2,3 +2,7 @@
 /__pycache__
 /tmp
 /Common/__pycache__
+output
+input
+!input/.keep
+!output/.keep
