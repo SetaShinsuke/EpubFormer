@@ -3,6 +3,8 @@ import re
 import urllib.parse
 import pyperclip
 import os, shutil
+import sys
+import time
 
 
 def verify_file_name(file_name):
@@ -21,11 +23,13 @@ def url_encode(string, encoding='utf-8'):
 def url_decode(string, encoding='utf-8'):
     return urllib.parse.unquote(string, encoding)
 
+
 def copy_to_clipboard(string):
     pyperclip.copy(string)
 
+
 # notNull = False: 允许不输入
-def requireInt(msg, notNull = False):
+def requireInt(msg, notNull=False):
     while 1:
         userInput = input(msg)
         try:
@@ -34,6 +38,7 @@ def requireInt(msg, notNull = False):
             return int(userInput)
         except ValueError:
             print('请输入数字...')
+
 
 def clear_folder(folder):
     for filename in os.listdir(folder):
@@ -45,3 +50,14 @@ def clear_folder(folder):
                 shutil.rmtree(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+
+def flush(content):
+    sys.stdout.write(f'\r>>{content}')
+    sys.stdout.flush()
+    # time.sleep(1)
+    # flush_reset()
+
+def flush_reset():
+    sys.stdout.write(f'\n')
+    sys.stdout.flush()
