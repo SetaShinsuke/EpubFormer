@@ -28,6 +28,7 @@ class EpubFormer:
         flush(f'Zipping epub...')
         new_epub = self.zip_epub()
         flush(f'Zipping epub [{new_epub}] fin')
+        flush_reset()
 
     def unzip(self):
         # 清空 tmp 工作目录
@@ -109,7 +110,7 @@ class EpubFormer:
 
     def zip_epub(self):
         try:
-            zip_name = join(self.output_folder, self.file.split('.')[0])
+            zip_name = join(self.output_folder, self.file.split('.epub')[0].replace('.kepub', '').replace('[Mox.moe]',''))
             new_zip = shutil.make_archive(zip_name, 'zip', self.tmp_folder)
             new_epub = new_zip.replace('.zip', '.epub')
             flush(f'new file: {new_epub}')
