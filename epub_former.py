@@ -12,7 +12,7 @@ class EpubFormer:
     def __init__(self, _file, _input_folder, _tmp_folder, _output_folder):
         self.file = _file
         self.file_full = join(_input_folder, _file)
-        self.input_folder = _input_folder
+        # self.input_folder = _input_folder
         self.tmp_folder = _tmp_folder
         self.output_folder = _output_folder
         self.pages = []
