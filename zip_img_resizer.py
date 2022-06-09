@@ -75,10 +75,13 @@ class ZipResizer:
                     f.encode('gbk')
                     # 是gbk编码
                 except BaseException:
-                    # 是cp437编码 ...\tmp\乱码*&(*&^
-                    nameNew = join(dest, f.encode('cp437').decode('gbk'))
-                    rename(name, nameNew)
-
+                    try:
+                        # 是cp437编码 ...\tmp\乱码*&(*&^
+                        nameNew = join(dest, f.encode('cp437').decode('gbk'))
+                        makedirs(dirname(nameNew), exist_ok=True)
+                        rename(name, nameNew)
+                    except BaseException as e:
+                        print(f'Error Renaming file: {e.args}')
             return dest
 
 # class ImgFile:
