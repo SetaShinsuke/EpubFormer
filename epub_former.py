@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 import bs4
 import shutil
 
+
 class EpubFormer:
 
     def __init__(self, _file, _input_folder, _tmp_folder, _output_folder):
@@ -69,7 +70,7 @@ class EpubFormer:
             # 重命名图片
             try:
                 flush(f'Renaming img: {old_name} -> {new_name} ...')
-                if(os.path.exists(img_path)):
+                if (os.path.exists(img_path)):
                     os.rename(img_path, img_path.replace(old_name, new_name))
             except BaseException as e:
                 flush_reset()
@@ -110,7 +111,11 @@ class EpubFormer:
 
     def zip_epub(self):
         try:
-            zip_name = join(self.output_folder, self.file.split('.epub')[0].replace('.kepub', '').replace('[Mox.moe]',''))
+            zip_name = join(self.output_folder,
+                            self.file.split('.epub')[0].replace('.kepub', '').replace('[Mox.moe]',
+                                                                                      ''))
+            if ('mox.moe' in (f'{self.file}').lower()):
+                zip_name += '[mox]'
             new_zip = shutil.make_archive(zip_name, 'zip', self.tmp_folder)
             new_epub = new_zip.replace('.zip', '.epub')
             flush(f'new file: {new_epub}')
