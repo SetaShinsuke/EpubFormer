@@ -116,6 +116,7 @@ class EpubFormer:
                                                                                       ''))
             if ('mox.moe' in (f'{self.file}').lower()):
                 zip_name += '[mox]'
+            zip_name += '[x]'
             new_zip = shutil.make_archive(zip_name, 'zip', self.tmp_folder)
             new_epub = new_zip.replace('.zip', '.epub')
             flush(f'new file: {new_epub}')
