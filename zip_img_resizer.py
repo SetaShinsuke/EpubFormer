@@ -33,6 +33,9 @@ class ZipResizer:
             for f in files:
                 imgPath = join(root, f)
                 imgResultPath = imgPath.replace(self.tmp_folder, self.output_folder)
+                # 转换为 .jpg 格式
+                if(imgResultPath.endswith('.png')):
+                    imgResultPath = imgResultPath[:-4] + '' + '.jpg'
                 # 先创建文件夹
                 makedirs(dirname(imgResultPath), exist_ok=True)
                 flush(f'result path: {imgResultPath}')
