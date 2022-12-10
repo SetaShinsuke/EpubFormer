@@ -2,7 +2,7 @@ import epub_former, zip_img_resizer
 import sys
 import os
 from os.path import join
-from Common.local_properties import RESIZE_SCALE
+from Common.local_properties import RESIZE_SCALE, REZIP_CONFIG, EPUB_CONFIG
 
 input_dir = join(os.getcwd(), 'input')
 tmp_dir = join(os.getcwd(), 'tmp')
@@ -21,10 +21,11 @@ for file in os.listdir(input_dir):
     if (file.endswith('.epub')):
         print(f'Epub File.{i_epub:02d}: {file}')
         i_epub += 1
-        former = epub_former.EpubFormer(file, input_dir, tmp_dir, output_dir)
+        former = epub_former.EpubFormer(file, input_dir, tmp_dir, output_dir, EPUB_CONFIG)
         former.start_forming()
-    elif(file.endswith('.zip')):
+    elif (file.endswith('.zip')):
         print(f'Zip File.{i_zip:02d}: {file}')
         i_zip += 1
-        resizer = zip_img_resizer.ZipResizer(file, input_dir, tmp_dir, output_dir, RESIZE_SCALE)
+        resizer = zip_img_resizer.ZipResizer(file, input_dir, tmp_dir, output_dir, RESIZE_SCALE, REZIP_CONFIG)
+        print(f'Mode: {REZIP_CONFIG}')
         resizer.start_forming()
