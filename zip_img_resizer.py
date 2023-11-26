@@ -16,10 +16,10 @@ class ZipResizer:
         self.tmp_folder = _tmp_folder
         self.output_folder = _output_folder
         self.scale = _scale
-        if (not _rezip_config):
-            self.rezip_config = {}
-        else:
+        self.rezip_config = {}
+        if (_rezip_config):
             self.rezip_config = _rezip_config
+        print(f'config: {self.rezip_config}')
 
     # 解开zip包，给每张图片缩放，再打包输出
     def start_forming(self):
@@ -48,7 +48,8 @@ class ZipResizer:
                 # 调整大小
                 try:
                     img = Image.open(imgPath).convert('RGB')  # 默认RGBA
-                    if (not self.scale == 1):
+                    # 判断是否需要缩放尺寸
+                    if(('force_convert' in self.rezip_config and self.rezip_config['force_convert'] == True) or self.scale != 1):
                         width, height = img.size
                         img = img.resize((int(width * self.scale), int(height * self.scale)),
                                          Image.ANTIALIAS)
@@ -59,7 +60,19 @@ class ZipResizer:
                             and self.rezip_config['convert_webp'] == True
                             and imgResultPath.endswith('.webp')):
                         imgResultPath = imgResultPath[:-5] + '' + '.jpg'
-                    img.save(imgResultPath)
+
+                    # 转换 png -> jpg
+                    if ('convert_png' in self.rezip_config
+                            and self.rezip_config['convert_png'] == True
+                            and imgResultPath.endswith('.png')):
+                        imgResultPath = imgResultPath[:-4] + '' + '.jpg'
+
+                    # 默认 quality = 75
+                    _quality = 75
+                    if ('quality' in self.rezip_config):
+                        _quality = self.rezip_config['quality']
+                    # 保存
+                    img.save(imgResultPath, quality = _quality)
                     flush(f'saved to {imgResultPath}')
                     img.close()
                 except UnidentifiedImageError as e:

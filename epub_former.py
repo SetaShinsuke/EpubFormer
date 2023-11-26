@@ -11,10 +11,10 @@ import re
 
 class EpubFormer:
 
-    def __init__(self, _file, _input_folder, _tmp_folder, _output_folder, _config):
-        self.file = _file
-        self.file_full = join(_input_folder, _file)
-        # self.input_folder = _input_folder
+    def __init__(self, _filepath_abs, _tmp_folder, _output_folder, _config):
+        self.file_name = os.path.basename(_filepath_abs)
+        self.file_path_abs = _filepath_abs
+        # self.input_folder = _input_folder # 从 path_abs 里获取
         self.tmp_folder = _tmp_folder
         self.output_folder = _output_folder
         self.pages = []
@@ -22,9 +22,9 @@ class EpubFormer:
 
     def start_forming(self):
         # todo: 清空文件夹
-        flush(f'Unzipping epub file [{self.file}]...')
+        flush(f'Unzipping epub file [{self.file_name}]...')
         self.unzip()
-        flush(f'Unzipping [{self.file}] fin')
+        flush(f'Unzipping [{self.file_name}] fin')
         flush(f'Reading Opf')
         self.readOpf()
         flush(f'Reading Opf fin')
@@ -37,7 +37,7 @@ class EpubFormer:
         # 清空 tmp 工作目录
         clear_folder(self.tmp_folder)
         # 解压缩
-        with zipfile.ZipFile(self.file_full, 'r') as zip_ref:
+        with zipfile.ZipFile(self.file_path_abs, 'r') as zip_ref:
             zip_ref.extractall(self.tmp_folder)
 
     # [cover.html, 1.html, 2.html ...]
@@ -107,7 +107,7 @@ class EpubFormer:
         # 修改 src
         img_name = src.split('/')[-1]
         # 已经处理过的 epub
-        if ('fix_x' in self.config and self.config['fix_x'] == True):
+        if ('fix_x' in self.config and self.config['fix_x'] == True and '[x]' in self.file_name):
             return img_path, img_name, img_name
         new_name = f'{img_index:03d}_{img_name}'
         img['src'] = src.replace(img_name, f'{img_index:03d}_{img_name}')
@@ -121,9 +121,9 @@ class EpubFormer:
     def zip_epub(self):
         try:
             zip_name = join(self.output_folder,
-                            self.file.split('.epub')[0].replace('.kepub', '').replace('[Mox.moe]',
+                            self.file_name.split('.epub')[0].replace('.kepub', '').replace('[Mox.moe]',
                                                                                       ''))
-            if ('mox.moe' in (f'{self.file}').lower()):
+            if ('mox.moe' in (f'{self.file_name}').lower()):
                 zip_name += '[mox]'
             if (not ('fix_x' in self.config and self.config['fix_x'] == True)):
                 zip_name += '[x]'
