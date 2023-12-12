@@ -1,4 +1,4 @@
-import epub_former, zip_img_resizer
+import epub_former, zip_img_resizer, json_merge_tool
 import sys
 import os
 from os.path import join
@@ -23,9 +23,10 @@ if (not os.path.exists(output_dir)):
 downloads_path = str(Path.home() / "Downloads")
 print(f'Download dir: {downloads_path}')
 filetypes = (
+    ('All files', '*.*'),
     ('Epub files', '*.epub'),
     ('Zip files', '*.zip'),
-    ('All files', '*.*')
+    ('JSON files', '*.json')
 )
 
 selected_files = fd.askopenfilenames(
@@ -49,6 +50,7 @@ if not selected_files:
 
 i_epub = 0
 i_zip = 0
+json_files = []
 for file in selected_files:
     if (file.endswith('.epub')):
         print(f'Epub File.{i_epub:02d}: {file}')
@@ -61,8 +63,14 @@ for file in selected_files:
         resizer = zip_img_resizer.ZipResizer(file, tmp_dir, output_dir, RESIZE_SCALE, REZIP_CONFIG)
         print(f'Mode: {REZIP_CONFIG}')
         resizer.start_forming()
+    elif file.endswith('.json'):
+        json_files.append(file)
 
-if (i_epub > 0 or i_zip > 0) and askquestion('提示', '任务已完成\n是否打开输出文件夹?'):
+if len(json_files) > 0:
+    merge_tool = json_merge_tool.JsonMergeTool(json_files, output_dir)
+    merge_tool.merge()
+
+if (i_epub > 0 or i_zip > 0 or len(json_files) > 0) and askquestion('提示', '任务已完成\n是否打开输出文件夹?'):
     os.startfile(output_dir)
 else:
     showinfo('提示', '任务已完成!')
