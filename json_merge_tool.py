@@ -15,6 +15,7 @@ class JsonMergeTool:
         self.output_folder = _output_folder
 
     def merge(self):
+        print("开始合并...")
         # 先分组:
         # {"vol_1": [task_001.json, task_002.json...], "vol_2": [] ...}
         groups = {}
@@ -45,8 +46,12 @@ class JsonMergeTool:
                 groups[vol_no] = []
             groups[vol_no].append(file)
 
+        print("已分组，正在合并中...")
+        i = 0
         # 根据 groups 整理 json
         for vol_no in groups:
+            i+=1
+            print(f'第 {i}/{len(groups)} 组合并中')
             config = None
             merged_json = {}
             files = groups[vol_no]
@@ -70,9 +75,11 @@ class JsonMergeTool:
             if BOOK_NAME in config:
                 book_name = config[BOOK_NAME]
             merged_file = os.path.join(self.output_folder, f'tasks_{book_name}{vol_no}.json')
+            print(f'合并完成, 准备保存: {merged_file}')
             with open(merged_file, 'w', encoding='utf8') as outfile:
                 try:
                     json.dump(merged_json, outfile, ensure_ascii=False)
+                    print(f'保存完成!')
                 except BaseException as e:
                     print(f'Dump JSON error: {str(e)}')
                     print(e)
