@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from os import walk, rename, makedirs
 from os.path import join, dirname, exists, basename
-from Common.utils import clear_folder, flush, flush_reset
+from common.utils import clear_folder, flush, flush_reset
 import zipfile
 from PIL import Image, UnidentifiedImageError
 import shutil

@@ -1,8 +1,7 @@
-import epub_former, zip_img_resizer, json_merge_tool
-import sys
+from tools import epub_former, zip_img_resizer, json_merge_tool
 import os
 from os.path import join
-from Common.local_properties import RESIZE_SCALE, REZIP_CONFIG, EPUB_CONFIG
+from common.local_properties import RESIZE_SCALE, REZIP_CONFIG, EPUB_CONFIG
 
 from tkinter import filedialog as fd
 from pathlib import Path
@@ -23,10 +22,10 @@ if (not os.path.exists(output_dir)):
 downloads_path = str(Path.home() / "Downloads")
 print(f'Download dir: {downloads_path}')
 filetypes = (
+    ('JSON files', '*.json'),
     ('All files', '*.*'),
     ('Epub files', '*.epub'),
-    ('Zip files', '*.zip'),
-    ('JSON files', '*.json')
+    ('Zip files', '*.zip')
 )
 
 selected_files = fd.askopenfilenames(
@@ -69,6 +68,8 @@ for file in selected_files:
 if len(json_files) > 0:
     merge_tool = json_merge_tool.JsonMergeTool(json_files, output_dir)
     merge_tool.merge()
+
+print(f'任务结束!')
 
 if (i_epub > 0 or i_zip > 0 or len(json_files) > 0) and askquestion('提示', '任务已完成\n是否打开输出文件夹?'):
     os.startfile(output_dir)

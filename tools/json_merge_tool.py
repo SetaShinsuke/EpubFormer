@@ -4,7 +4,8 @@ import sys
 import re
 from datetime import datetime
 
-VOL_HEADS_FILE = "vol_heads"
+VOL_HEADS = "vol_heads"
+VOL_NO = "vol_no"
 CONFIG_KEY = "config"
 BOOK_NAME = "book_name"
 
@@ -23,7 +24,7 @@ class JsonMergeTool:
         # 找到卷首 index
         for file in self.files:
             # _vol_heads_xxx.json
-            if re.search(VOL_HEADS_FILE, os.path.basename(file)):
+            if re.search(VOL_HEADS, os.path.basename(file)):
                 try:
                     raw_str = open(file, 'r', encoding='utf-8').read()
                     vol_heads = json.loads(raw_str)
@@ -37,7 +38,7 @@ class JsonMergeTool:
         # 根据 index 分组
         for file in self.files:
             if len(vol_heads) == 0:  # 没有分组信息，全部放到未知分卷里
-                groups[f'_unknown_vol_{datetime.now().microsecond}'] = self.files
+                groups[f'_vol_{datetime.now().microsecond}[unknown]'] = self.files
                 pass
             file_name = os.path.basename(file)
             chp_index = int(re.search('.*tasks_([\d]+).*.json', file_name)[1])
@@ -50,10 +51,10 @@ class JsonMergeTool:
         i = 0
         # 根据 groups 整理 json
         for vol_no in groups:
-            i+=1
+            i += 1
             print(f'第 {i}/{len(groups)} 组合并中')
             config = None
-            merged_json = {}
+            merged_json = {CONFIG_KEY: {}} # 保证 config 在最前面
             files = groups[vol_no]
             for file in files:
                 try:
@@ -62,6 +63,10 @@ class JsonMergeTool:
                     # 初始化 config 字段
                     if (not config and CONFIG_KEY in task_json):
                         config = task_json[CONFIG_KEY]
+                        if len(vol_heads) > 0:
+                            config[VOL_HEADS] = vol_heads
+                            config[VOL_NO] = vol_no.split('[')[0]
+                        merged_json[CONFIG_KEY] = config
                         del task_json[CONFIG_KEY]
                     for k in task_json:
                         merged_json[k] = task_json[k]
@@ -70,11 +75,10 @@ class JsonMergeTool:
                     print(e)
                     input("按任意键退出")
                     sys.exit(0)
-            merged_json[CONFIG_KEY] = config
             book_name = "unknown_book_"
             if BOOK_NAME in config:
                 book_name = config[BOOK_NAME]
-            merged_file = os.path.join(self.output_folder, f'tasks_{book_name}{vol_no}.json')
+            merged_file = os.path.join(self.output_folder, f'tasks_{book_name}_Vol{vol_no}.json')
             print(f'合并完成, 准备保存: {merged_file}')
             with open(merged_file, 'w', encoding='utf8') as outfile:
                 try:
@@ -93,11 +97,15 @@ class JsonMergeTool:
         end = 'end'
         _volHeads.sort()
         for head in _volHeads:
-            start = head
-            if _volHeads.index(start) + 1 < len(_volHeads):
-                end = _volHeads[_volHeads.index(start) + 1]
             if (_chpIndex >= head):
                 vol += 1
-            else:
-                name = f'{vol}'.rjust(3, '0') + f'[{start}-{end}]'
-                return {"vol_no": vol, "vol_name": f'{name}'}
+                start = head
+                if _volHeads.index(start) + 1 < len(_volHeads):
+                    end = _volHeads[_volHeads.index(start) + 1]
+                    end -= 1
+                else:
+                    end = 'end'
+        start = f'{start}'.rjust(3, '0')
+        end = f'{end}'.rjust(3, '0')
+        name = f'{vol}'.rjust(3, '0') + f'[{start}-{end}]'
+        return {"vol_no": vol, "vol_name": f'{name}'}

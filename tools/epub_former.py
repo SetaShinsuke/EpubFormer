@@ -2,7 +2,7 @@ import zipfile
 import os
 from os.path import join
 import time
-from Common.utils import clear_folder, flush, flush_reset
+from common.utils import clear_folder, flush, flush_reset
 import xml.etree.ElementTree as ET
 import bs4
 import shutil
@@ -103,7 +103,7 @@ class EpubFormer:
             soup = bs4.BeautifulSoup(txt, 'html.parser')
         img = soup.find('img')
         src = img['src']
-        img_path = os.path.normpath(join(html_path, '..', src.replace('/', '\\')))
+        img_path = os.path.normpath(join(html_path, '../..', src.replace('/', '\\')))
         # 修改 src
         img_name = src.split('/')[-1]
         # 已经处理过的 epub

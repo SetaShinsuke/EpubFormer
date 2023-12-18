@@ -17,7 +17,7 @@
 
 ### ZipImgResizer
 1. 将 zip 文件复制到 [input](/input) 目录；
-2. 编辑 [local_properties.py](/Common/local_properties.py)，设置缩放比例 `RESIZE_SCALE` （如 0.6 为缩放到 60%）；
+2. 编辑 [local_properties.py](/common/local_properties.py)，设置缩放比例 `RESIZE_SCALE` （如 0.6 为缩放到 60%）；
 3. 运行 [main.py](main.py)；
 4. 脚本自动转换 input 中的所有 zip 文件；
 5. 转换后的文件保存在 [output](/output) 目录。
