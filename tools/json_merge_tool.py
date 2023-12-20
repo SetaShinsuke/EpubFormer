@@ -54,7 +54,7 @@ class JsonMergeTool:
             i += 1
             print(f'第 {i}/{len(groups)} 组合并中')
             config = None
-            merged_json = {CONFIG_KEY: {}} # 保证 config 在最前面
+            merged_json = {CONFIG_KEY: {}}  # 保证 config 在最前面
             files = groups[vol_no]
             for file in files:
                 try:
@@ -67,8 +67,10 @@ class JsonMergeTool:
                             config[VOL_HEADS] = vol_heads
                             config[VOL_NO] = vol_no.split('[')[0]
                         merged_json[CONFIG_KEY] = config
-                        del task_json[CONFIG_KEY]
+                        # del task_json[CONFIG_KEY]
                     for k in task_json:
+                        if k == CONFIG_KEY: # 防止 config 覆盖
+                            continue
                         merged_json[k] = task_json[k]
                 except Exception as e:
                     print("读取任务文件失败!")
