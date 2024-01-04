@@ -22,9 +22,9 @@ if (not os.path.exists(output_dir)):
 downloads_path = str(Path.home() / "Downloads")
 print(f'Download dir: {downloads_path}')
 filetypes = (
+    ('Epub files', '*.epub'),
     ('JSON files', '*.json'),
     ('All files', '*.*'),
-    ('Epub files', '*.epub'),
     ('Zip files', '*.zip')
 )
 
