@@ -68,7 +68,6 @@ for file in selected_files:
     elif file.endswith('.json'):
         json_files.append(file)
     elif file.endswith('.webp'):
-        print(f'Webp Files, ready to convert to jpg...')
         webp_files.append(file)
 
 if len(json_files) > 0:

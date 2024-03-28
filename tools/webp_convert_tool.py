@@ -11,7 +11,8 @@ class WebpConvertTool:
         self.files = _files_abs
         self.output_folder = _output_folder
 
-    def covert2jpg(self, quality = 100):
+    def covert2jpg(self, quality=100):
+        print(f'Converting webps, quality: {quality}')
         for f in self.files:
             file_name = re.sub(r'(.*).webp', r'\1.jpg', basename(f))
             result_path = join(self.output_folder, file_name)
