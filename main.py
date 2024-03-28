@@ -1,4 +1,4 @@
-from tools import epub_former, zip_img_resizer, json_merge_tool
+from tools import epub_former, zip_img_resizer, json_merge_tool, webp_convert_tool
 import os
 from os.path import join
 from common.local_properties import RESIZE_SCALE, REZIP_CONFIG, EPUB_CONFIG
@@ -22,8 +22,10 @@ if (not os.path.exists(output_dir)):
 downloads_path = str(Path.home() / "Downloads")
 print(f'Download dir: {downloads_path}')
 filetypes = (
-    ('Epub files', '*.epub'),
+    ('Mostly used', '.json .epub .zip .webp'),
+    ('Webp files', '*.webp'),
     ('JSON files', '*.json'),
+    ('Epub files', '*.epub'),
     ('All files', '*.*'),
     ('Zip files', '*.zip')
 )
@@ -50,6 +52,7 @@ if not selected_files:
 i_epub = 0
 i_zip = 0
 json_files = []
+webp_files = []
 for file in selected_files:
     if (file.endswith('.epub')):
         print(f'Epub File.{i_epub:02d}: {file}')
@@ -64,14 +67,21 @@ for file in selected_files:
         resizer.start_forming()
     elif file.endswith('.json'):
         json_files.append(file)
+    elif file.endswith('.webp'):
+        print(f'Webp Files, ready to convert to jpg...')
+        webp_files.append(file)
 
 if len(json_files) > 0:
     merge_tool = json_merge_tool.JsonMergeTool(json_files, output_dir)
     merge_tool.merge()
+if len(webp_files) > 0:
+    converter = webp_convert_tool.WebpConvertTool(webp_files, output_dir)
+    converter.covert2jpg()
 
 print(f'任务结束!')
 
-if (i_epub > 0 or i_zip > 0 or len(json_files) > 0) and askquestion('提示', '任务已完成\n是否打开输出文件夹?'):
+if (i_epub > 0 or i_zip > 0 or len(json_files) > 0 or len(webp_files) > 0) and askquestion('提示',
+                                                                                           '任务已完成\n是否打开输出文件夹?'):
     os.startfile(output_dir)
 else:
     showinfo('提示', '任务已完成!')

@@ -39,7 +39,7 @@ class JsonMergeTool:
         for file in self.files:
             if len(vol_heads) == 0:  # 没有分组信息，全部放到未知分卷里
                 groups[f'_vol_{datetime.now().microsecond}[unknown]'] = self.files
-                pass
+                break
             file_name = os.path.basename(file)
             chp_index = int(re.search('.*tasks_([\d]+).*.json', file_name)[1])
             vol_no = self.cal_vol_no(chp_index, vol_heads)["vol_name"]
@@ -69,7 +69,7 @@ class JsonMergeTool:
                         merged_json[CONFIG_KEY] = config
                         # del task_json[CONFIG_KEY]
                     for k in task_json:
-                        if k == CONFIG_KEY: # 防止 config 覆盖
+                        if k == CONFIG_KEY:  # 防止 config 覆盖
                             continue
                         merged_json[k] = task_json[k]
                 except Exception as e:

@@ -12,6 +12,6 @@ REZIP_CONFIG = {
     'convert_png': False
 }
 EPUB_CONFIG = {
-    'fix_x': False # 修复文件名带有 [x] 的文件（已经处理过一遍的文件）
+    'fix_x': True # 修复文件名带有 [x] 的文件（已经处理过一遍的文件）
 }
 # REZIP_MODE = 'webp2jpg'
