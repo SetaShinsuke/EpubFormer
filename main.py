@@ -1,7 +1,7 @@
 from tools import epub_former, zip_img_resizer, json_merge_tool, webp_convert_tool
 import os
 from os.path import join
-from common.local_properties import RESIZE_SCALE, REZIP_CONFIG, EPUB_CONFIG
+from common.local_properties import RESIZE_SCALE, REZIP_CONFIG, EPUB_CONFIG, WEBP_CONFIG
 
 from tkinter import filedialog as fd
 from pathlib import Path
@@ -75,7 +75,7 @@ if len(json_files) > 0:
     merge_tool.merge()
 if len(webp_files) > 0:
     converter = webp_convert_tool.WebpConvertTool(webp_files, output_dir)
-    converter.covert2jpg()
+    converter.start_convert(WEBP_CONFIG['format'])
 
 print(f'任务结束!')
 
