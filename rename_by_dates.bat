@@ -1,0 +1,1 @@
+python .\tools\date_rename_tool.py

@@ -79,8 +79,8 @@ if len(webp_files) > 0:
 
 print(f'任务结束!')
 
-if (i_epub > 0 or i_zip > 0 or len(json_files) > 0 or len(webp_files) > 0) and askquestion('提示',
-                                                                                           '任务已完成\n是否打开输出文件夹?'):
+if (i_epub > 0 or i_zip > 0 or len(json_files) > 0 or len(webp_files) > 0) \
+        and askquestion('提示','任务已完成\n是否打开输出文件夹?') == 'yes':
     os.startfile(output_dir)
 else:
     showinfo('提示', '任务已完成!')
