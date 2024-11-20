@@ -1,5 +1,6 @@
 import json
 import os.path
+import shutil
 import sys
 import re
 from datetime import datetime
@@ -26,6 +27,9 @@ class JsonMergeTool:
             # _vol_heads_xxx.json
             if re.search(VOL_HEADS, os.path.basename(file)):
                 try:
+                    # 复制一份到输出文件夹
+                    shutil.copy(file, self.output_folder)
+                    # 读取 vol_heads 文件
                     raw_str = open(file, 'r', encoding='utf-8').read()
                     vol_heads = json.loads(raw_str)
                     self.files.remove(file)
