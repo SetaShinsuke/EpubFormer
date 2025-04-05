@@ -1,4 +1,4 @@
-from tools import epub_former, zip_img_resizer, json_merge_tool, webp_convert_tool
+from tools import epub_former, zip_img_resizer, json_merge_tool, webp_convert_tool, ts_convert_tool
 import os
 from os.path import join
 from common.local_properties import RESIZE_SCALE, REZIP_CONFIG, EPUB_CONFIG, WEBP_CONFIG
@@ -22,12 +22,13 @@ if (not os.path.exists(output_dir)):
 downloads_path = str(Path.home() / "Downloads")
 print(f'Download dir: {downloads_path}')
 filetypes = (
-    ('Mostly used', '.json .epub .zip .webp'),
+    ('Mostly used', '.json .epub .zip .webp .ts'),
     ('Webp files', '*.webp'),
     ('JSON files', '*.json'),
     ('Epub files', '*.epub'),
     ('All files', '*.*'),
-    ('Zip files', '*.zip')
+    ('Zip files', '*.zip'),
+    ('TS files', '*.ts')
 )
 
 selected_files = fd.askopenfilenames(
@@ -53,6 +54,7 @@ i_epub = 0
 i_zip = 0
 json_files = []
 webp_files = []
+ts_files = []
 for file in selected_files:
     if (file.endswith('.epub')):
         print(f'Epub File.{i_epub:02d}: {file}')
@@ -69,6 +71,8 @@ for file in selected_files:
         json_files.append(file)
     elif file.endswith('.webp'):
         webp_files.append(file)
+    elif file.endswith('.ts'):
+        ts_files.append(file)
 
 if len(json_files) > 0:
     merge_tool = json_merge_tool.JsonMergeTool(json_files, output_dir)
@@ -76,6 +80,9 @@ if len(json_files) > 0:
 if len(webp_files) > 0:
     converter = webp_convert_tool.WebpConvertTool(webp_files, output_dir)
     converter.start_convert(WEBP_CONFIG['format'])
+if len(ts_files) > 0:
+    ts_tool = ts_convert_tool.TsConvertTool(ts_files, None)
+    ts_tool.start_convert('mp4')
 
 print(f'任务结束!')
 

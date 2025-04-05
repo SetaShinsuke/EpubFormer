@@ -45,7 +45,7 @@ class JsonMergeTool:
                 groups[f'_vol_{datetime.now().microsecond}[unknown]'] = self.files
                 break
             file_name = os.path.basename(file)
-            chp_index = int(re.search('.*tasks_([\d]+).*.json', file_name)[1])
+            chp_index = int(re.search('.*tasks_([\\d]+).*.json', file_name)[1])
             vol_no = self.cal_vol_no(chp_index, vol_heads)["vol_name"]
             if vol_no not in groups:
                 groups[vol_no] = []
