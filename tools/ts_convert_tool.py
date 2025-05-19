@@ -22,11 +22,12 @@ class TsConvertTool:
             if (out_folder == None):
                 out_folder = dirname(f)
             file_name = re.sub(r'(.*).ts', r'\1.' + format, base_name)
+            # file_name = re.sub(r' ', )
             result_path = PureWindowsPath(out_folder).joinpath(file_name)
             # 先创建文件夹
             makedirs(dirname(result_path), exist_ok=True)
             flush(f'result path: {result_path}')
-            cmd = f'cmd /C "ffmpeg -i {f} -c copy {result_path}"'
+            cmd = f'cmd /C "ffmpeg -i \"{f}\" -c copy \"{result_path}\""'
             print('\nCMD:')
             print(cmd)
             os.system(cmd)

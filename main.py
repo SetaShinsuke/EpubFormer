@@ -43,7 +43,7 @@ selected_files = fd.askopenfilenames(
 # )
 
 if not selected_files:
-    use_input_dir = askquestion('提示', '未选择文件\n自动检查.\input目录?')
+    use_input_dir = askquestion('提示', '未选择文件\n自动检查.\\input目录?')
     # 不自动检测 input 目录
     if use_input_dir:
         selected_files = map(lambda file_name: join(input_dir, file_name), os.listdir(input_dir))
